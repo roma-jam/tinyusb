@@ -2,20 +2,26 @@
 # Common make rules for all examples
 # ---------------------------------------
 
-ifeq ($(CROSS_COMPILE),xtensa-esp32s2-elf-)
+ifeq ($(findstring esp32s, $(BOARD)), esp32s)
+$(info Vendor: $(VENDOR), family: $(CHIP_FAMILY), target: $(CHIP_TARGET))
+ifeq ($(CHIP_FAMILY), esp32sx)
+
 # Espressif IDF use CMake build system, this add wrapper target to call idf.py
+.PHONY: all clean build flash monitor dfu-flash dfu
+.DEFAULT_GOAL := build
 
-.PHONY: all clean flash
-.DEFAULT_GOAL := all
-
-all:
-	idf.py -B$(BUILD) -DBOARD=$(BOARD) build
+all flash monitor dfu-flash dfu :
+	idf.py -B$(BUILD) -DBOARD=$(BOARD) $@
+    
+build :
+	idf.py -B$(BUILD) -DBOARD=$(BOARD) -DIDF_TARGET=$(CHIP_TARGET) $@
 
 clean:
-	idf.py -B$(BUILD) -DBOARD=$(BOARD) clean
-
-flash:
-	idf.py -B$(BUILD) -DBOARD=$(BOARD) flash
+	idf.py -B$(BUILD) -DBOARD=$(BOARD) fullclean
+	if test -f sdkconfig; then $(RM) sdkconfig ; fi
+else
+    $(info Unsupported $(VENDOR) chip family: $(CHIP_FAMILY))
+endif
 
 else
 # GNU Make build system

@@ -7,9 +7,9 @@ set(TOP "../../..")
 get_filename_component(TOP "${TOP}" REALPATH)
 
 # Add example src and bsp directories
-set(EXTRA_COMPONENT_DIRS "src" "${TOP}/hw/bsp/${BOARD}")
+set(EXTRA_COMPONENT_DIRS "${TOP}/hw/bsp/${BOARD}" "src")
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-set(SUPPORTED_TARGETS esp32s2)
+set(SUPPORTED_TARGETS esp32s2 esp32s3)
 
 project(hid_composite_freertos)

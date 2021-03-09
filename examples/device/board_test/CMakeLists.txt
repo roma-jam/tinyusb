@@ -10,6 +10,6 @@ get_filename_component(TOP "${TOP}" REALPATH)
 set(EXTRA_COMPONENT_DIRS "src" "${TOP}/hw/bsp/${BOARD}")
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-set(SUPPORTED_TARGETS esp32s2)
+set(SUPPORTED_TARGETS esp32s2 esp32s3)
 
 project(board_test)
