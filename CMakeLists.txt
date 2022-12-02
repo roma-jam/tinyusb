@@ -43,7 +43,7 @@ idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${includes_public}
                        PRIV_INCLUDE_DIRS ${includes_private}
                        PRIV_REQUIRES driver
-                       REQUIRED_IDF_TARGETS esp32s3 esp32s3
+                       REQUIRED_IDF_TARGETS esp32s2 esp32s3
                        )
 
 target_compile_options(${COMPONENT_LIB} PRIVATE ${compile_options})
