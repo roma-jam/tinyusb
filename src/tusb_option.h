@@ -34,7 +34,7 @@ typedef int make_iso_compilers_happy;
 
 #define TUSB_VERSION_MAJOR     0
 #define TUSB_VERSION_MINOR     14
-#define TUSB_VERSION_REVISION  0
+#define TUSB_VERSION_REVISION  1
 #define TUSB_VERSION_STRING    TU_STRING(TUSB_VERSION_MAJOR) "." TU_STRING(TUSB_VERSION_MINOR) "." TU_STRING(TUSB_VERSION_REVISION)
 
 //--------------------------------------------------------------------+
