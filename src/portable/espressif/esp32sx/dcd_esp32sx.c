@@ -31,7 +31,8 @@
 #if (((CFG_TUSB_MCU == OPT_MCU_ESP32S2) ||  (CFG_TUSB_MCU == OPT_MCU_ESP32S3)) && CFG_TUD_ENABLED)
 
 // Espressif
-#include "freertos/xtensa_api.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "esp_intr_alloc.h"
 #include "esp_log.h"
 #include "soc/dport_reg.h"
@@ -193,6 +194,7 @@ void dcd_init(uint8_t rhport)
                  USB_RXFLVIMSK_M   |
                  USB_ERLYSUSPMSK_M |
                  USB_USBSUSPMSK_M  |
+                 USB_WKUPINTMSK_M  |
                  USB_USBRSTMSK_M   |
                  USB_ENUMDONEMSK_M |
                  USB_RESETDETMSK_M |
@@ -852,6 +854,7 @@ static void _dcd_int_handler(void* arg)
                   USB_GOUTNAKEFF    |
                   USB_ERLYSUSP_M    |
                   USB_USBSUSP_M     |
+                  USB_WKUPINT_M     |
                   USB_ISOOUTDROP_M  |
                   USB_EOPF_M        |
                   USB_EPMIS_M       |
