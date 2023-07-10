@@ -42,7 +42,7 @@ set(srcs
     "src/class/dfu/dfu_device.c"
     "src/class/dfu/dfu_rt_device.c"
     # Common, device-mode related
-    "src/portable/espressif/${tusb_family}/dcd_${tusb_family}.c"
+    "src/portable/synopsys/dwc2/dcd_dwc2.c"
     "src/common/tusb_fifo.c"
     "src/device/usbd_control.c"
     "src/device/usbd.c"
