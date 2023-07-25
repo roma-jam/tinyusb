@@ -33,6 +33,7 @@ set(srcs
     "src/class/msc/msc_device.c"
     "src/class/vendor/vendor_device.c"
     "src/class/audio/audio_device.c"
+    "src/class/video/video_device.c"
     "src/class/bth/bth_device.c"
     # NET class
     "src/class/net/ecm_rndis_device.c"
