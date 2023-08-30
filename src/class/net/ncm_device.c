@@ -95,6 +95,11 @@ struct ecm_notify_struct
   uint32_t downlink, uplink;
 };
 
+enum {
+  NETWORK_DISCONNECT = 0,
+  NETWORK_CONNECTED
+} network_state_t;
+
 typedef struct
 {
   uint8_t itf_num;      // Index number of Management Interface, +1 for Data Interface
@@ -150,6 +155,10 @@ CFG_TUSB_MEM_SECTION CFG_TUSB_MEM_ALIGN tu_static transmit_ntb_t transmit_ntb[2]
 CFG_TUSB_MEM_SECTION CFG_TUSB_MEM_ALIGN tu_static uint8_t receive_ntb[CFG_TUD_NCM_OUT_NTB_MAX_SIZE];
 
 tu_static ncm_interface_t ncm_interface;
+
+static void ncm_report(void);
+
+uint8_t network_state;
 
 /*
  * Set up the NTB state in ncm_interface to be ready to add datagrams.
@@ -241,6 +250,20 @@ void tud_network_recv_renew(void)
   tud_network_recv_cb(receive_ntb + ndp->datagram[i].wDatagramIndex, ndp->datagram[i].wDatagramLength);
 }
 
+void tud_network_disconnect(void)
+{
+    network_state = NETWORK_DISCONNECT;
+    ncm_interface.report_state = REPORT_CONNECTED;
+    ncm_report();
+}
+
+void tud_network_connect(void)
+{
+    network_state = NETWORK_CONNECTED;
+    ncm_interface.report_state = REPORT_CONNECTED;
+    ncm_report();
+}
+
 //--------------------------------------------------------------------+
 // USBD Driver API
 //--------------------------------------------------------------------+
@@ -324,6 +347,7 @@ static void ncm_report(void)
     ncm_interface.report_pending = true;
   } else if (ncm_interface.report_state == REPORT_CONNECTED) {
     ncm_notify_connected.header.wIndex = ncm_interface.itf_num;
+    ncm_notify_connected.header.wValue = network_state;
     usbd_edpt_xfer(rhport, ncm_interface.ep_notif, (uint8_t *) &ncm_notify_connected, sizeof(ncm_notify_connected));
     ncm_interface.report_state = REPORT_DONE;
     ncm_interface.report_pending = true;
