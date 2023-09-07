@@ -77,6 +77,12 @@ bool tud_network_can_xmit(uint16_t size);
 // if network_can_xmit() returns true, network_xmit() can be called once
 void tud_network_xmit(void *ref, uint16_t arg);
 
+// indicate to network disconnect
+void tud_network_disconnect(void);
+
+// indicate to network connect
+void tud_network_connect(void);
+
 //--------------------------------------------------------------------+
 // Application Callbacks (WEAK is optional)
 //--------------------------------------------------------------------+
