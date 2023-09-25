@@ -158,7 +158,8 @@ tu_static ncm_interface_t ncm_interface;
 
 static void ncm_report(void);
 
-uint8_t network_state;
+// default network state is connected, in case not actively call tud_network_connect
+static uint8_t network_state = NETWORK_CONNECTED;
 
 /*
  * Set up the NTB state in ncm_interface to be ready to add datagrams.
@@ -250,18 +251,40 @@ void tud_network_recv_renew(void)
   tud_network_recv_cb(receive_ntb + ndp->datagram[i].wDatagramIndex, ndp->datagram[i].wDatagramLength);
 }
 
-void tud_network_disconnect(void)
+bool tud_network_disconnect(void)
 {
-    network_state = NETWORK_DISCONNECT;
+  // already disconnected
+  if (network_state == NETWORK_DISCONNECT) {
+    return true;
+  }
+  
+  if (!ncm_interface.report_pending) {
     ncm_interface.report_state = REPORT_CONNECTED;
+    network_state = NETWORK_DISCONNECT;
     ncm_report();
+  } else {
+    // busy...
+    return false;
+  }
+  return true;
 }
 
-void tud_network_connect(void)
+bool tud_network_connect(void)
 {
-    network_state = NETWORK_CONNECTED;
+  // already connected
+  if (network_state == NETWORK_CONNECTED) {
+    return true;
+  }
+
+  if (!ncm_interface.report_pending) {
     ncm_interface.report_state = REPORT_CONNECTED;
+    network_state = NETWORK_CONNECTED;
     ncm_report();
+    return true;
+  } else {
+    // busy...
+    return false;
+  }
 }
 
 //--------------------------------------------------------------------+
