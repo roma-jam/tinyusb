@@ -1,11 +1,14 @@
 idf_build_get_property(target IDF_TARGET)
 
-set(tusb_family "esp32sx")
-
 if(target STREQUAL "esp32s3")
     set(tusb_mcu "OPT_MCU_ESP32S3")
+    set(tusb_family "esp32sx")
 elseif(target STREQUAL "esp32s2")
     set(tusb_mcu "OPT_MCU_ESP32S2")
+    set(tusb_family "esp32sx")
+elseif(target STREQUAL "esp32p4")
+    set(tusb_mcu "OPT_MCU_ESP32P4")
+    set(tusb_family "esp32px")
 endif()
 
 set(compile_options
@@ -54,7 +57,6 @@ idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS ${includes_public}
                        PRIV_INCLUDE_DIRS ${includes_private}
                        PRIV_REQUIRES esp_netif # required by rndis_reports.c: #include "netif/ethernet.h"
-                       REQUIRED_IDF_TARGETS esp32s2 esp32s3
                        )
 
 target_compile_options(${COMPONENT_LIB} PUBLIC ${compile_options})
